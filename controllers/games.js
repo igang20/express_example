@@ -1,7 +1,10 @@
 const { writeData } = require("../utils/data"); // Чтение и запись данных в JSON-файл
 // Получим игры из JSON-файла и отправим в ответ на запрос
 const sendAllGames = async (req, res) => {
-  res.send(req.games);
+  res.setHeader("Content-Type", "application/json");
+  // Вернём найденные игры в формате JSON
+  console.log(req.games);
+  res.end(JSON.stringify(req.games));
 };
 
 const deleteGame = async (req, res) => {

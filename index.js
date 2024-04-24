@@ -4,8 +4,12 @@ const { gamesRouter } = require("./routes/games");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cors = require("./middlewares/cors");
+const { connectToDatabase } = require("./database/connect");
+const usersRouter = require("./routes/users");
 
 const app = express();
+
+connectToDatabase();
 
 app.use(cors);
 app.use(bodyParser.json());
