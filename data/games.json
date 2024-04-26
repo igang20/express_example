@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "G.U.N.N.E.R.",
+    "image": "https://code.s3.yandex.net/teens/pindie-games/gunner/cover.png",
+    "link": "https://code.s3.yandex.net/teens/pindie-games/gunner/game/index.html",
+    "description": "Продержись как можно дольше, отбиваясь от врагов, которых будет становиться всё больше."
+  },
+  {
+    "id": 1,
+    "title": "Go Away.",
+    "image": "https://code.s3.yandex.net/teens/pindie-games/go-away/cover.jpg",
+    "link": "https://code.s3.yandex.net/teens/pindie-games/go-away/game/index.html",
+    "description": "Управляй автомобилем, избегая аварий и перепрыгивая препятствия на пути к следующему уровню."
+  },
+  {
+    "id": 1,
+    "title": "Deep Under The Castle",
+    "image": "https://code.s3.yandex.net/teens/pindie-games/Deep-Under-The-Castle/cover.png",
+    "link": "https://code.s3.yandex.net/teens/pindie-games/Deep-Under-The-Castle/index.html",
+    "description": "Прыгай по платформам и собирай ключи, чтобы выбраться из проклятого замка."
+  }
+]
