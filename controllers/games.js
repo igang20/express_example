@@ -11,7 +11,7 @@ const sendAllGames = async (req, res, next) => {
     return;
   }
   req.games = games;
-  next();
+  res.send(games);
 };
 
 const sendUpdatedGames = (req, res) => {

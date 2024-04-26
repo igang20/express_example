@@ -12,6 +12,7 @@ const getAllGames = async (req, res, next) => {
     return;
   }
   req.games = games;
+
   next();
 };
 

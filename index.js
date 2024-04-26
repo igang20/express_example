@@ -7,11 +7,13 @@ const cors = require("./middlewares/cors");
 
 const app = express();
 
-app.use(cors);
-app.use(bodyParser.json());
-app.use(mainRoute);
-app.use(gamesRouter);
-app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  cors,
+  bodyParser.json(),
+  mainRoute,
+  gamesRouter,
+  express.static(path.join(__dirname, "public"))
+);
 
 const PORT = 3000;
 
