@@ -1,0 +1,32 @@
+const users = require("../models/user");
+const bcrypt = require("bcryptjs");
+
+const login = (req, res) => {
+  //   const { email, password } = req.body;
+  //   users
+  //     .findOne({ email })
+  //     .then((user) => {
+  //       if (!user) {
+  //         return Promise.reject(new Error("Неправильные почта или пароль"));
+  //       }
+  //       return bcrypt.compare(password, user.password).then((matched) => {
+  //         if (!matched) {
+  //           // Хеши не совпали — отклоняем промис
+  //           return Promise.reject(new Error("Неправильные почта или пароль"));
+  //         }
+  //         // Аутентификация успешна
+  //         return user; // Теперь user доступен
+  //       });
+  //     })
+  //     .then((user) => {
+  //       res
+  //         .status(200)
+  //         .send({ _id: user._id, username: user.username, email: user.email });
+  //     })
+  //     .catch((error) => {
+  //       // Возвращаем ошибку аутентификации
+  //       res.status(401).send({ message: error.message });
+  //     });
+};
+
+module.exports = { login };
