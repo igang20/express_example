@@ -39,4 +39,21 @@ const gameSchema = new mongoose.Schema({
   ],
 });
 
+gameSchema.statics.findGameByCategory = function (category) {
+  return this.find({}) // Выполним поиск всех игр
+    .populate({
+      path: "categories",
+      match: { name: category }, // Опция поможет сопоставить подходящие игры по выбранной категории
+    })
+    .populate({
+      path: "users",
+      select: "-password", // Позволяет получить записи о пользователях за исключением их паролей (они же хранятся в зашифрованном виде)
+    })
+    .then((games) => {
+      // Отфильтруем по наличию искомой категории
+      return games.filter((game) => game.categories.length > 0);
+    });
+  // ...
+};
+
 module.exports = mongoose.model("game", gameSchema);
