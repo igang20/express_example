@@ -48,7 +48,9 @@ const updateGame = async (req, res, next) => {
     res.setHeader("Content-Type", "application/json");
     res
       .status(400)
-      .send(JSON.stringify({ message: "Ошибка обновления игры", error }));
+      .send(
+        JSON.stringify({ message: "Ошибка обновления игры", error: `${error}` })
+      );
   }
 };
 const checkEmptyFields = async (req, res, next) => {
