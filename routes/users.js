@@ -19,7 +19,7 @@ const {
   senduserDeleted,
 } = require("../controllers/users");
 const { checkAuth } = require("../middlewares/auth");
-const { sendMe } = require("../controllers/games");
+const { sendMe } = require("../controllers/users");
 
 usersRouter.get("/users", findAllUsers, sendAllUsers);
 usersRouter.post(

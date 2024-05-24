@@ -34,4 +34,5 @@ module.exports = {
   sendUserById,
   sendUserUpdated,
   senduserDeleted,
+  sendMe,
 };
