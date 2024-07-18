@@ -41,6 +41,6 @@ usersRouter.put(
   sendUserUpdated
 );
 usersRouter.delete("/users/:id", checkAuth, deleteUser, senduserDeleted);
-usersRouter.get("/me", checkAuth1);
+usersRouter.get("/me", checkAuth);
 
 module.exports = { usersRouter };
