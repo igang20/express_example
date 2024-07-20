@@ -1,17 +1,31 @@
 const users = require("../models/user");
 const bcrypt = require("bcryptjs");
+const db = require("../database/postgresConnect");
 
 async function findAllUsers(req, res, next) {
-  req.usersArray = await users.find({}, { password: 0 });
+  // req.usersArray = await users.find({}, { password: 0 });
+  const usersArray = await db.query(
+    'select id, username, email from "user" ORDER BY id '
+  );
+
+  req.usersArray = usersArray.rows;
   next();
 }
 
 const createUser = async (req, res, next) => {
   console.log("POST /users");
+
   try {
-    req.user = await users.create(req.body);
+    // req.user = await users.create(req.body);
+    const { username, email, password } = req.body;
+    const newUser = await db.query(
+      'INSERT INTO "user" VALUES (default, $1, $2, $3) RETURNING *',
+      [username, email, password]
+    );
+    req.user = newUser.rows;
     next();
   } catch (error) {
+    console.log(error);
     res.setHeader("Content-Type", "application/json");
     res
       .status(400)
@@ -22,7 +36,12 @@ const createUser = async (req, res, next) => {
 const findUserById = async (req, res, next) => {
   console.log("GET /users/:id");
   try {
-    req.user = await users.findById(req.params.id, { password: 0 });
+    // req.user = await users.findById(req.params.id, { password: 0 });
+    const userById = await db.query(
+      'SELECT id, username, email FROM "user" WHERE id = $1',
+      [req.params.id]
+    );
+    req.user = userById.rows;
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
@@ -32,7 +51,14 @@ const findUserById = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
-    req.user = await users.findByIdAndUpdate(req.params.id, req.body);
+    const { username, email } = req.body;
+    // req.user = await users.findByIdAndUpdate(req.params.id, req.body);
+
+    const updatedUser = await db.query(
+      'UPDATE "user" set username = $1, email = $2 where id = $3 returning *',
+      [username, email, req.params.id]
+    );
+    req.user = updatedUser;
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
@@ -44,7 +70,11 @@ const updateUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    req.user = await users.findByIdAndDelete(req.params.id);
+    // req.user = await users.findByIdAndDelete(req.params.id);
+    const deletedUser = await db.query('DELETE FROM "user" WHERE id = $1', [
+      req.params.id,
+    ]);
+    req.user = deletedUser.rows;
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");

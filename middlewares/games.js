@@ -1,17 +1,44 @@
 const games = require("../models/game");
+const db = require("../database/postgresConnect");
 
 const findAllGames = async (req, res, next) => {
-  // Поиск всех игр в проекте по заданной категории
-  if (req.query["categories.name"]) {
-    req.games = await games.findGameByCategory(req.query["categories.name"]);
-    next();
-    return;
-  }
-  // Поиск всех игр в проекте
-  req.games = await games.find({}).populate("categories").populate({
-    path: "users",
-    select: "-password", // Исключим данные о паролях пользователей
-  });
+  // // Поиск всех игр в проекте по заданной категории
+  // if (req.query["categories.name"]) {
+  //   req.games = await games.findGameByCategory(req.query["categories.name"]);
+  //   next();
+  //   return;
+  // }
+  // // Поиск всех игр в проекте
+  // req.games = await games.find({}).populate("categories").populate({
+  //   path: "users",
+  //   select: "-password", // Исключим данные о паролях пользователей
+  // });
+  const games = await db.query(
+    // "\
+    //   SELECT \
+    //   game.*, \
+    //   array_agg(category.name order by category_id) as categories \
+    //   FROM game \
+    //     INNER JOIN category4game c4g ON c4g.game_id = game.id \
+    //     INNER JOIN category ON category.id = c4g.category_id  \
+    //   GROUP BY game.id \
+    // "
+
+    `SELECT \
+	game.*, \
+	JSON_ARRAYAGG( \
+	json_build_object( \
+	'id', "user".id, \
+	'username', "user".username, \
+	'email', "user".email) ORDER by "user".id )	as  users \
+  from vote4game\
+	FULL JOIN game ON game.id = vote4game.game_id
+	LEFT  JOIN "user" on "user".id = vote4game.user_id\
+  GROUP by game.id \
+  ORDER by game.id \
+  `
+  );
+  req.games = games.rows;
 
   next();
 };

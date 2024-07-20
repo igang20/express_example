@@ -1,17 +1,26 @@
 const categories = require("../models/category");
+const db = require("../database/postgresConnect");
 
 async function findAllCategories(req, res, next) {
-  req.categoriesArray = await categories.find({});
+  // req.categoriesArray = await categories.find({});
+  const categories = await db.query("select * from category order by id");
+  req.categoriesArray = categories.rows;
   next();
 }
 
 const createCategory = async (req, res, next) => {
   try {
     console.log("POST /categories");
-    req.category = await categories.create(req.body);
+    // req.category = await categories.create(req.body);
+    const newCategory = await db.query(
+      "insert INTO category VALUES(default, $1) RETURNING *",
+      [req.body.name]
+    );
+    req.category = newCategory.rows;
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
+    console.log(error);
     res
       .status(400)
       .send(JSON.stringify({ message: "Ошибка создания категории" }));
@@ -49,9 +58,14 @@ const checkIsCategoryExists = async (req, res, next) => {
 const findCategoryById = async (req, res, next) => {
   console.log("GET /categories/:id");
   try {
-    req.category = await categories.findById(req.params.id);
+    const neceseryCategory = await db.query(
+      "select * from category where id = $1",
+      [req.params.id]
+    );
+    req.category = neceseryCategory.rows;
     next();
   } catch (error) {
+    console.log(error);
     res.setHeader("Content-Type", "application/json");
     res.status(404).send(JSON.stringify({ message: "Категория не найдена" }));
   }
@@ -59,9 +73,17 @@ const findCategoryById = async (req, res, next) => {
 
 const updateCategory = async (req, res, next) => {
   try {
-    req.caegory = await categories.findByIdAndUpdate(req.params.id, req.body);
+    // req.caegory = await categories.findByIdAndUpdate(req.params.id, req.body);
+    console.log(req.params.id);
+    const updateCategory = await db.query(
+      "UPDATE category SET name = $1 WHERE id = $2 RETURNING *",
+      [req.body.name, req.params.id]
+    );
+    console.log(updateCategory);
+    req.category = updateCategory.rows;
     next();
   } catch (error) {
+    console.log(error);
     res.setHeader("Content-Type", "application/json");
     res
       .status(400)
@@ -71,7 +93,11 @@ const updateCategory = async (req, res, next) => {
 
 const deleteCategory = async (req, res, next) => {
   try {
-    req.caegory = await categories.findByIdAndDelete(req.params.id, req.body);
+    // req.caegory = await categories.findByIdAndDelete(req.params.id, req.body);
+    const deletedCategory = await db.query(
+      "DELETE FROM category WHERE id = $1 returning *",
+      [req.params.id]
+    );
     next();
   } catch (error) {
     res.setHeader("Content-Type", "application/json");

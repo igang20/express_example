@@ -1,5 +1,3 @@
-const { password } = require("pg/lib/defaults");
-
 const Pool = require("pg").Pool;
 
 const pool = new Pool({
@@ -9,3 +7,5 @@ const pool = new Pool({
   port: 5432,
   atabase: "pindie",
 });
+
+module.exports = pool;
